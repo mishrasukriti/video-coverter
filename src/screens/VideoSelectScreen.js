@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { HomeButton } from "../components/HomeButton";
 import { Convert } from "../components/Convert";
-// import { ipcRenderer } from 'electron';
 window.ipcRenderer = window.require('electron').ipcRenderer;
 
 
@@ -50,19 +49,13 @@ export const VideoSelectScreen = (props) =>{
         });
         setVideos(videosData);
         if(videos.length) {
-            //  props.addVideos(videos);
             console.log("Printing jayant log: ");
             console.log(videos);
-
-            // if(props.small) {
-            //     props.history.push('/convert');
-            // }
         }
     }
 
     const onConvertClick = () => {
       console.log("inside convert click function. length of videos is: ");
-      alert(props.outputPath);
       window.ipcRenderer.send('videos-added', videos, props.outputPath);
       window.ipcRenderer.on('conversion:end', (event) => {        
       alert("Videos converted successfully in HLS format");
@@ -101,18 +94,6 @@ export const VideoSelectScreen = (props) =>{
         </ul>
         </li>
     ));
-
-    // const renderChildren = ({ isDragActive, isDragReject}) => {
-    //     if(isDragActive) {
-    //         return <h4 className="drop-message">Yeah, this LOOKS GOOD, Please Drop here</h4>;
-    //     } else if(isDragReject) {
-    //         return <h4 className="drop-message">Uh oh, I don't know this file format and how to read this.</h4>;
-    //     } else {
-    //         {
-    //             return <h4 className="drop-message">Drag and Drop some file or Select files from your computer.</h4>;
-    //         }
-    //     }
-    // }
 
   return (
     <div>

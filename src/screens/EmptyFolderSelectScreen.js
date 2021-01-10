@@ -63,10 +63,7 @@ export const EmptyFolderSelectScreen = (props) =>{
             if(files.length >0) {
                 alert("Please select an empty folder");
             } else {
-                alert("Empty folder selected. Your converted files will be saved in:");
-                // let output = document.getElementById("emptyFolderId");
-                // props.setOutputPath(output.files[0].webkitRelativePath);
-                // alert(JSON.stringify(files));
+                alert("Empty folder is selected.");
                 history.push('/videoSelect', { from: "EmptyFolderSelectScreen" });
             }
     }
@@ -79,22 +76,14 @@ export const EmptyFolderSelectScreen = (props) =>{
      }
 
       const {
-        acceptedFiles,
         getRootProps,
         getInputProps,
         isDragActive,
         isDragAccept,
         isDragReject
       } = useDropzone({
-          onDrop: onDrop,
-          accept:'*'
+          onDrop: onDrop
         });
-
-        let acceptedFileItems = acceptedFiles.map(file => (
-            <li key={file.path}>
-            {file.path} - {file.size} bytes
-            </li>
-        ));
 
   return (
     <div>
@@ -102,15 +91,11 @@ export const EmptyFolderSelectScreen = (props) =>{
         <HomeButton/>
         <div className="container">
           <Container {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
-              <input {...getInputProps()} id="emptyFolderId" directory webkitdirectory onSelect={onChangeOutputPath} />
+              <input {...getInputProps()} id="emptyFolderId" directory webkitdirectory />
               <h3>Drag and drop Empty Folder here to start a new project</h3>
               
           </Container>
-          <aside>
-          <h4>Accepted files</h4>
-          <ul>{acceptedFileItems}</ul>
-        </aside>
-          </div>
+        </div>
       </section>
     </div>
     
