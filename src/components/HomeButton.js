@@ -4,24 +4,24 @@ import { Button } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
 
-export const EntryScreen = ()=>{
+export const HomeButton = ()=>{
 
     const history = useHistory();
 
 
     const onClickHandler = ()=>{
-        history.push('/emptyFolderSelect', { from: "EntryScreen" });
+        history.push('/', { from: "VideoSelectScreen" });
     }
 
     return(
         <div>
-            <div className="m-5">
+            <div >
                 <h1 >Video Convertor App</h1>
             </div>
             
-            <div className="m-5">
-                <Button variant="primary" size="md" block onClick={onClickHandler} >
-                    Add New Project
+            <div className="m-3">
+                <Button variant="primary" size="lg"  onClick={onClickHandler} >
+                    Go to Home
                 </Button>
             </div>
             

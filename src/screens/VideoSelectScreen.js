@@ -1,8 +1,12 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 import {useDropzone} from 'react-dropzone';
 import styled from 'styled-components';
 
+import { HomeButton } from "../components/HomeButton";
+import { Convert } from "../components/Convert";
+// import { ipcRenderer } from 'electron';
+window.ipcRenderer = window.require('electron').ipcRenderer;
 
 
 const getColor = (props) => {
@@ -36,20 +40,34 @@ const Container = styled.div`
   height: 300px;
 `;
 
+
 export const VideoSelectScreen = (props) =>{
+    let videosData;
+    const [videos, setVideos] = useState([]);
     const onDrop = (files) => {
-        const videos = _.map(files, ({name, path, size, type}) => {
+        videosData = _.map(files, ({name, path, size, type}) => {
             return {name, path, size, type};
         });
+        setVideos(videosData);
         if(videos.length) {
             //  props.addVideos(videos);
             console.log("Printing jayant log: ");
             console.log(videos);
 
-            if(props.small) {
-                props.history.push('/convert');
-            }
+            // if(props.small) {
+            //     props.history.push('/convert');
+            // }
         }
+    }
+
+    const onConvertClick = () => {
+      console.log("inside convert click function. length of videos is: ");
+      alert(props.outputPath);
+      window.ipcRenderer.send('videos-added', videos, props.outputPath);
+      window.ipcRenderer.on('conversion:end', (event) => {        
+      alert("Videos converted successfully in HLS format");
+      alert('Generated files are uploaded in the same folder where your mp4 file(s) was/were located');
+      });
     }
 
     const {
@@ -67,13 +85,13 @@ export const VideoSelectScreen = (props) =>{
 
         
       
-    const acceptedFileItems = acceptedFiles.map(file => (
+    let acceptedFileItems = acceptedFiles.map(file => (
         <li key={file.path}>
         {file.path} - {file.size} bytes
         </li>
     ));
 
-    const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+    let fileRejectionItems = fileRejections.map(({ file, errors }) => (
         <li key={file.path}>
         {file.path} - {file.size} bytes
         <ul>
@@ -97,23 +115,28 @@ export const VideoSelectScreen = (props) =>{
     // }
 
   return (
-    <section className="Container">
-      <div className="container">
-        <Container {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
-            <input {...getInputProps()} />
-            <p>Drag 'n' drop multiple videos here or click to select files</p>
-            
-        </Container>
-        </div>
-      
-      
-      <aside>
-        <h4>Accepted files</h4>
-        <ul>{acceptedFileItems}</ul>
-        <h4>Rejected files</h4>
-        <ul>{fileRejectionItems}</ul>
-      </aside>
-    </section>
+    <div>
+      <section className="Container">
+        <HomeButton/>
+        <div className="container">
+          <Container {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
+              <input {...getInputProps()} />
+              <p>Drag 'n' drop multiple videos here or click to select files</p>
+              
+          </Container>
+          </div>
+        
+        
+        <aside>
+          <h4>Accepted files</h4>
+          <ul>{acceptedFileItems}</ul>
+          <h4>Rejected files</h4>
+          <ul>{fileRejectionItems}</ul>
+        </aside>
+        <Convert onConvertClick={onConvertClick} />
+      </section>
+    </div>
+    
   );
 }
 
