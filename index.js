@@ -18,7 +18,7 @@ app.on('ready', () => {
     }
   });
 
-  mainWindow.loadURL(`http://localhost:3000/`);
+  mainWindow.loadURL(`https://eloquent-hypatia-14c9e6.netlify.app/`);
   // mainWindow.loadURL(`file://${__dirname}/public/index.html`);
 
   mainWindow.on('close', ()=> mainWindow=null)
